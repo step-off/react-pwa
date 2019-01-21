@@ -10,7 +10,7 @@ export default class App extends React.Component {
 		return (
 			<>
 				<h1>
-					Hello World
+					React PWA
 				</h1>
 				<ul>
 					{this.state.users.map(user => <li key={user.id}>{user.name}</li>)}
