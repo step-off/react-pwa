@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 
 export default class App extends React.Component {
-	usersUrl = 'https://jsonplaceholder.typicode.com/users';
+	usersUrl = 'https://reqres.in/api/users';
 	state = {
 		users: []
 	};
@@ -15,7 +15,7 @@ export default class App extends React.Component {
 					React PWA
 				</h1>
 				<ul>
-					{this.state.users.map(user => <li key={user.id}>{user.name}</li>)}
+					{this.state.users.map(user => <li key={user.id}>{`${user.first_name} ${user.last_name}`}</li>)}
 				</ul>
 				<div>
 					<button type={'button'} onClick={this.postUsers}>
@@ -30,7 +30,7 @@ export default class App extends React.Component {
 		const fetchedUsers = await this.fetchUsers();
 
 		this.setState({
-			users: fetchedUsers
+			users: fetchedUsers.data
 		});
 	}
 
@@ -44,7 +44,8 @@ export default class App extends React.Component {
 		await fetch(this.usersUrl, {
 			method: 'POST',
 			body: JSON.stringify({
-				username: 'Random User'
+				name: "morpheus",
+				job: "leader"
 			}),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8"
