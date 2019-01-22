@@ -1,11 +1,14 @@
 import React from 'react';
 
 import './App.css';
+import RequestService from "./RequestService";
 
 export default class App extends React.Component {
 	usersUrl = 'https://reqres.in/api/users';
 	state = {
-		users: []
+		users: [],
+		userName: '',
+		userJob: ''
 	};
 
 	render() {
@@ -18,8 +21,26 @@ export default class App extends React.Component {
 					{this.state.users.map(user => <li key={user.id}>{`${user.first_name} ${user.last_name}`}</li>)}
 				</ul>
 				<div>
+					<div className={'inputsGroup'}>
+						<div className={'inputWrapper'}>
+							<label for="userNameInput">
+								<div>
+									Enter user name
+								</div>
+								<input type="text" id="userNameInput" value={this.state.userName} onChange={this.handleNameChange}/>
+							</label>
+						</div>
+						<div className={'inputWrapper'}>
+							<label for="userJobInput">
+								<div>
+									Enter user job
+								</div>
+								<input type="text" id="userJobInput" value={this.state.userJob} onChange={this.handleJobChange}/>
+							</label>
+						</div>
+					</div>
 					<button type={'button'} onClick={this.postUsers}>
-						Post users
+						Post user
 					</button>
 				</div>
 			</>
@@ -35,21 +56,31 @@ export default class App extends React.Component {
 	}
 
 	fetchUsers = async () => {
-		const response = await fetch(this.usersUrl);
-
-		return response.json();
+		return await RequestService.get(this.usersUrl);
 	};
 
 	postUsers = async () => {
-		await fetch(this.usersUrl, {
-			method: 'POST',
-			body: JSON.stringify({
-				name: "morpheus",
-				job: "leader"
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8"
-			}
+		const {userName, userJob} = this.state;
+
+		await RequestService.post(this.usersUrl, {
+			name: userName,
+			job: userJob
+		})
+	};
+
+	handleNameChange = event => {
+		const {value} = event.target;
+
+		this.setState({
+			userName: value
+		})
+	};
+
+	handleJobChange = event => {
+		const {value} = event.target;
+
+		this.setState({
+			userJob: value
 		})
 	};
 }

@@ -5,7 +5,10 @@
 
 body {
     font-family: "SegoeUI", sans-serif;
-    margin: 0;
-    padding: 0;
     background-image: url("main-bg.jpg");
+}
+
+.inputWrapper {
+    display: inline-block;
+    margin: 10px;
 }
