@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "dexie": "^2.0.4",
     "express": "^4.16.4",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"

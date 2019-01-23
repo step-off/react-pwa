@@ -62,10 +62,19 @@ export default class App extends React.Component {
 	postUsers = async () => {
 		const {userName, userJob} = this.state;
 
-		await RequestService.post(this.usersUrl, {
-			name: userName,
-			job: userJob
-		})
+		try {
+			await RequestService.post(this.usersUrl, {
+				name: userName,
+				job: userJob
+			});
+
+			this.setState({
+				userName: '',
+				userJob: ''
+			})
+		} catch (e) {
+			console.log('Error with posting users');
+		}
 	};
 
 	handleNameChange = event => {
