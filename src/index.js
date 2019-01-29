@@ -4,6 +4,7 @@ import React from 'react';
 
 import App from './components/App.jsx';
 import OfflineRequestsDatabase from "./components/OfflineRequestsDatabase";
+import RequestService from "./components/RequestService";
 
 window.addEventListener('load', async () => {
 	if ('serviceWorker' in navigator) {
@@ -17,15 +18,10 @@ window.addEventListener('load', async () => {
 			console.log('Error with SW registration')
 		}
 	}
-
-	const offlineDbExists = await OfflineRequestsDatabase.exists();
-	if (offlineDbExists) {
-		OfflineRequestsDatabase.flushRequestsQueue();
-	}
 });
 
 window.addEventListener('online', () => {
-	OfflineRequestsDatabase.flushRequestsQueue();
+	RequestService.flushOfflineRequestsQueue();
 });
 
 ReactDOM.render(

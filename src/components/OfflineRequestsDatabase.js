@@ -1,50 +1,44 @@
-import Dexie from 'dexie';
+import localforage from 'localforage';
 
 export default class OfflineRequestsDatabase {
 	static _db = null;
-	static _dbVersion = 1;
-	static _databaseName = `${window.location.host}-offline-requests`;
+	static _databaseName = `${window.location.host}-offlineDB`;
+	static _storeName = 'requestsStore';
 
-	// constructor() {
-	// 	if (DatabaseSingletonCreator._instance) {
-	// 		return DatabaseSingletonCreator._instance;
-	// 	} else {
-	// 		DatabaseSingletonCreator._instance = this;
-	// 	}
-	// }
-
-	static initDB() {
+	static async initDB() {
 		if (this._db) {
 			return;
 		}
-		var db = new Dexie("MyDatabase");
-
-		db.version(this._dbVersion).stores({
-			requests: "url, method, timestamp"
+		const db = await localforage.createInstance({
+			name: this._databaseName,
+			driver: localforage.INDEXEDDB,
+			storeName: this._storeName
 		});
 		this._db = db;
 	}
 
-	static saveRequest(request) {
-		this.initDB();
-		this._db.requests.add(request)
-	}
+	static async saveRequest(request) {
+		await this.initDB();
 
-	static async exists() {
-		return await Dexie.exists(this._databaseName);
+		const length = await this._db.length();
+		const requestIndex = length + 1;
+
+		this._db.setItem(requestIndex, request);
 	}
 
 	static async delete() {
+		await this._db.clear();
 		this._db = null;
-		return await Dexie.delete(this._databaseName);
 	}
 
-	static async flushRequestsQueue() {
-		this.initDB();
-		if (navigator.onLine) {
-			console.log(this._db.requests.toArray())
-		}
+	static async getRequestsQueue() {
+		await this.initDB();
+
+		const queue = [];
+		await this._db.iterate((value) => {
+			queue.push(value);
+		});
+
+		return queue;
 	}
 }
-
-// export default new DatabaseSingletonCreator();
