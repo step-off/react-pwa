@@ -20,10 +20,15 @@ export default class OfflineRequestsDatabase {
 	static async saveRequest(request) {
 		await this.initDB();
 
-		const length = await this._db.length();
-		const requestIndex = length + 1;
+		const {url} = request;
+		const requestsInDB = await this._db.getItem(url);
 
-		this._db.setItem(requestIndex, request);
+		if (requestsInDB) {
+			const updatedRequests = this.addOrUpdateRequest(request);
+			this._db.setItem(url, updatedRequests);
+		} else {
+			this._db.setItem(url, [request]);
+		}
 	}
 
 	static async delete() {
@@ -34,11 +39,33 @@ export default class OfflineRequestsDatabase {
 	static async getRequestsQueue() {
 		await this.initDB();
 
-		const queue = [];
+		let queue = [];
 		await this._db.iterate((value) => {
-			queue.push(value);
+			queue = queue.concat(value);
 		});
 
 		return queue;
+	}
+
+	static getLatestRequestsFromQueue(queue) {
+		const urlToRequestsMap = {};
+		const latestRequests = [];
+
+		queue.forEach(request => {
+			const {url} = request;
+
+			if (urlToRequestsMap.hasOwnProperty(url)) {
+				const urlRequests = urlToRequestsMap[url];
+
+			} else {
+				urlToRequestsMap[url] = [];
+			}
+		});
+
+		return latestRequests;
+	}
+
+	static addOrUpdateRequest() {
+
 	}
 }

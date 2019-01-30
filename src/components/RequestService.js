@@ -28,8 +28,9 @@ export default class RequestService {
 
 	static async flushOfflineRequestsQueue() {
 		const queue = await OfflineRequestsDatabase.getRequestsQueue();
+		const uniqueRequests = OfflineRequestsDatabase.getUniqueRequestsFromQueue();
 
-		await Promise.all(queue.map(request => this.post(request.url, request.payload)))
+		await Promise.all(queue.map(request => this.post(request.url, request.payload)));
 
 		await OfflineRequestsDatabase.delete();
 	}
