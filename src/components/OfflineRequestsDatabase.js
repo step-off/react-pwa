@@ -11,7 +11,6 @@ export default class OfflineRequestsDatabase {
 		}
 		const db = await localforage.createInstance({
 			name: this._databaseName,
-			driver: localforage.INDEXEDDB,
 			storeName: this._storeName
 		});
 		this._db = db;
