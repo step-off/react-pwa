@@ -20,11 +20,11 @@ export default class OfflineRequestsDatabase {
 		await this.initDB();
 
 		const {url} = request;
-		const requestsInDB = await this._db.getItem(url);
+		const requestsInDBWithSameUrl = await this._db.getItem(url);
 
-		if (requestsInDB) {
-			const updatedRequests = this.addOrUpdateRequest(request);
-			this._db.setItem(url, updatedRequests);
+		if (requestsInDBWithSameUrl) {
+			const updatedRequestsList = this.addOrUpdateRequest(request, requestsInDBWithSameUrl);
+			this._db.setItem(url, updatedRequestsList);
 		} else {
 			this._db.setItem(url, [request]);
 		}
@@ -46,25 +46,21 @@ export default class OfflineRequestsDatabase {
 		return queue;
 	}
 
-	static getLatestRequestsFromQueue(queue) {
-		const urlToRequestsMap = {};
-		const latestRequests = [];
+	static addOrUpdateRequest(requestToAdd, requestsInDB) {
+		const staleRequestWithSameMethodInDB = requestsInDB.find(
+			i => (
+				i.method === requestToAdd.method &&
+					i.timestamp < requestToAdd.timestamp
+			)
+		);
 
-		queue.forEach(request => {
-			const {url} = request;
-
-			if (urlToRequestsMap.hasOwnProperty(url)) {
-				const urlRequests = urlToRequestsMap[url];
-
-			} else {
-				urlToRequestsMap[url] = [];
-			}
-		});
-
-		return latestRequests;
-	}
-
-	static addOrUpdateRequest() {
-
+		if (staleRequestWithSameMethodInDB) {
+			return [
+				...requestsInDB.filter(i => i !== staleRequestWithSameMethodInDB),
+				requestToAdd
+			];
+		} else {
+			return [...requestsInDB, requestToAdd];
+		}
 	}
 }

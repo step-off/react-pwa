@@ -42,6 +42,15 @@ export default class App extends React.Component {
 					<button type={'button'} onClick={this.postUsers}>
 						Post user
 					</button>
+					<button type={'button'} onClick={this.patchUsers}>
+						Patch user
+					</button>
+					<button type={'button'} onClick={this.putUsers}>
+						Put user
+					</button>
+					<button type={'button'} onClick={this.deleteUsers}>
+						Delete user
+					</button>
 				</div>
 			</>
 		)
@@ -60,13 +69,51 @@ export default class App extends React.Component {
 	};
 
 	postUsers = async () => {
+		return await this.sendUsersRequest('POST');
+	};
+
+	patchUsers = async () => {
+		return await this.sendUsersRequest('PATCH');
+	};
+
+	putUsers = async () => {
+		return await this.sendUsersRequest('PUT');
+	};
+
+	deleteUsers = async () => {
+		return await this.sendUsersRequest('DELETE');
+	};
+
+	sendUsersRequest = async (method) => {
 		const {userName, userJob} = this.state;
 
 		try {
-			await RequestService.post(this.usersUrl, {
-				name: userName,
-				job: userJob
-			});
+			switch (method) {
+				case 'POST':
+					await RequestService.post(this.usersUrl, {
+						name: userName,
+						job: userJob
+					});
+					break;
+				case 'PUT':
+					await RequestService.put(this.usersUrl, {
+						name: userName,
+						job: userJob
+					});
+					break;
+				case 'PATCH':
+					await RequestService.patch(this.usersUrl, {
+						name: userName,
+						job: userJob
+					});
+					break;
+				case 'DELETE':
+					await RequestService.delete(this.usersUrl, {
+						name: userName,
+						job: userJob
+					});
+					break;
+			}
 
 			this.setState({
 				userName: '',
