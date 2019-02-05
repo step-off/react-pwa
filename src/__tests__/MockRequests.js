@@ -28,6 +28,5 @@ export default [
 		method: 'PUT',
 		payload: 'latest payload',
 		timestamp: 1548831298099
-	},
-
+	}
 ];
