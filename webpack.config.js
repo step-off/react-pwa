@@ -57,6 +57,9 @@ module.exports = {
 			}
 		]
 	},
+	resolve: {
+		extensions: ['.js', '.jsx'],
+	},
 	plugins: [
 		new CleanWebpackPlugin(['public/precache-manifest.*.js']),
 		new MiniCssExtractPlugin({

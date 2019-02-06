@@ -2,9 +2,9 @@ import '@babel/polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
-import App from './components/App.jsx';
-import OfflineRequestsDatabase from "./components/OfflineRequestsDatabase";
-import RequestService from "./components/RequestService";
+import App from './components/App/App.jsx';
+import OfflineRequestsDatabase from "./services/OfflineRequestsDatabase";
+import RequestService from "./services/RequestService";
 
 window.addEventListener('load', async () => {
 	if ('serviceWorker' in navigator) {

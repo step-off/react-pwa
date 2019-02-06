@@ -1,4 +1,4 @@
- import OfflineRequestsDatabase from '../components/OfflineRequestsDatabase';
+ import OfflineRequestsDatabase from '../services/OfflineRequestsDatabase';
 import MockRequests from './MockRequests';
 
 

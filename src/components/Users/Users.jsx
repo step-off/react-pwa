@@ -1,9 +1,8 @@
 import React from 'react';
 
-import './App.css';
-import RequestService from "./RequestService";
+import RequestService from "../../services/RequestService";
 
-export default class App extends React.Component {
+export default class Users extends React.Component {
 	usersUrl = 'https://reqres.in/api/users';
 	state = {
 		users: [],
@@ -14,28 +13,27 @@ export default class App extends React.Component {
 	render() {
 		return (
 			<>
-				<h1>
-					React PWA
-				</h1>
 				<ul>
 					{this.state.users.map(user => <li key={user.id}>{`${user.first_name} ${user.last_name}`}</li>)}
 				</ul>
 				<div>
 					<div className={'inputsGroup'}>
 						<div className={'inputWrapper'}>
-							<label for="userNameInput">
+							<label htmlFor="userNameInput">
 								<div>
 									Enter user name
 								</div>
-								<input type="text" id="userNameInput" value={this.state.userName} onChange={this.handleNameChange}/>
+								<input type="text" id="userNameInput" value={this.state.userName}
+								       onChange={this.handleNameChange}/>
 							</label>
 						</div>
 						<div className={'inputWrapper'}>
-							<label for="userJobInput">
+							<label htmlFor="userJobInput">
 								<div>
 									Enter user job
 								</div>
-								<input type="text" id="userJobInput" value={this.state.userJob} onChange={this.handleJobChange}/>
+								<input type="text" id="userJobInput" value={this.state.userJob}
+								       onChange={this.handleJobChange}/>
 							</label>
 						</div>
 					</div>
@@ -52,7 +50,7 @@ export default class App extends React.Component {
 						Delete user
 					</button>
 				</div>
-			</>
+				</>
 		)
 	}
 
